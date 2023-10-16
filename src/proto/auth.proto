@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package auth;
+
+service AuthService {
+    rpc GetToken(GetTokenRequest) returns (GetTokenResponse) {}
+    rpc Validate(ValidateRequest) returns (ValidateResponse) {}
+    rpc SignUp(SignUpRequest) returns (SignUpResponse) {}
+}
+
+message OauthUser {
+    string provider = 1;
+    string email = 2;
+    optional string name = 3;
+    optional string avatarUrl = 4;
+}
+
+message User {
+    string name = 1;
+    string email = 2;
+    string password = 3;
+}
+
+message GetTokenRequest {
+    OauthUser user = 1;
+}
+
+message GetTokenResponse {
+    string token = 1;
+}
+
+message ValidateRequest {
+    string sub = 1;
+    string email = 2;
+}
+
+message ValidateResponse {
+    int32 status = 1;
+    repeated string error = 2;
+    string userId = 3;
+    string email = 4;
+}
+
+
+message SignUpRequest {
+    User user = 1;
+}
+
+message SignUpResponse {
+    string error = 1;
+    string token = 2;
+}
