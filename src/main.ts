@@ -1,16 +1,17 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ConfigService } from '@nestjs/config';
-import { NodeConfig } from './configs/node.config';
-import { ConfigName } from './constants/config-name.constant';
-import * as cookieParser from 'cookie-parser';
+import { Transport } from '@nestjs/microservices';
+import { protobufPackage } from './modules/auth/auth.pb';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  const nodeConfig = app.get(ConfigService).get<NodeConfig>(ConfigName.Node);
-  app.setGlobalPrefix('/api');
-
-  app.use(cookieParser());
-  await app.listen(nodeConfig.port);
+  const app = await NestFactory.createMicroservice(AppModule, {
+    transport: Transport.GRPC,
+    options: {
+      url: '0.0.0.0:50051',
+      package: protobufPackage,
+      protoPath: 'src/proto/auth.proto',
+    },
+  });
+  await app.listen();
 }
 bootstrap();

@@ -1,27 +1,23 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { DatabaseModule } from './database/database.module';
 import { ConfigModule } from '@nestjs/config';
-import { databaseConfig } from './configs/database.config';
-import { googleConfig } from './configs/google.config';
-import { nodeConfig } from './configs/node.config';
-import { jwtConfig } from './configs/jwt.config';
-import { AuthModule } from './auth/auth.module';
+
+import { DatabaseModule } from '@core/database/database.module';
+import nodeConfig from '@core/configs/node.config';
+import databaseConfig from '@core/configs/database.config';
+import jwtConfig from '@core/configs/jwt.config';
+import { AuthModule } from '@modules/auth/auth.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
-      load: [nodeConfig, databaseConfig, googleConfig, jwtConfig],
+      load: [nodeConfig, databaseConfig, jwtConfig],
       cache: true,
       expandVariables: true,
     }),
     DatabaseModule,
     AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
 export class AppModule {}
