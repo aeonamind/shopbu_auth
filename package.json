@@ -20,11 +20,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "proto:auth": "protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto -I=src/proto --ts_proto_out=src/auth/ src/proto/auth.proto --ts_proto_opt=nestJs=true --ts_proto_opt=fileSuffix=.pb --experimental_allow_proto3_optional",
+    "proto:auth": "protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto -I=src/proto --ts_proto_out=src/modules/auth/ src/proto/auth.proto --ts_proto_opt=nestJs=true --ts_proto_opt=fileSuffix=.pb --experimental_allow_proto3_optional",
     "proto:all": "pnpm run proto:auth"
   },
   "dependencies": {
-    "@commitlint/config-conventional": "^17.8.0",
     "@grpc/grpc-js": "^1.9.1",
     "@grpc/proto-loader": "^0.7.9",
     "@nestjs/common": "^10.0.0",

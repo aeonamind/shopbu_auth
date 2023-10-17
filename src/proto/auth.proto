@@ -8,21 +8,28 @@ service AuthService {
     rpc SignUp(SignUpRequest) returns (SignUpResponse) {}
 }
 
-message OauthUser {
+message OauthUserRequest {
     string provider = 1;
     string email = 2;
     optional string name = 3;
     optional string avatarUrl = 4;
 }
 
-message User {
+message UserRequest {
     string name = 1;
     string email = 2;
     string password = 3;
 }
 
+message UserResponse {
+    string id = 1;
+    string name = 2;
+    string email = 3;
+    string avatarUrl = 4;
+}
+
 message GetTokenRequest {
-    OauthUser user = 1;
+    OauthUserRequest user = 1;
 }
 
 message GetTokenResponse {
@@ -35,15 +42,13 @@ message ValidateRequest {
 }
 
 message ValidateResponse {
-    int32 status = 1;
-    repeated string error = 2;
-    string userId = 3;
-    string email = 4;
+    string error = 1;
+    UserResponse user = 2;
 }
 
 
 message SignUpRequest {
-    User user = 1;
+    UserRequest user = 1;
 }
 
 message SignUpResponse {

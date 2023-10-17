@@ -1,6 +1,7 @@
 import { Controller } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import { GrpcMethod } from '@nestjs/microservices';
+
+import { AuthService } from './auth.service';
 import {
   AUTH_SERVICE_NAME,
   GetTokenResponse,
