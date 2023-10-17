@@ -1,11 +1,10 @@
-import { HttpStatus, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/modules/users/entities/user.entity';
 import { Repository } from 'typeorm';
-import { OauthUser } from './auth.pb';
+import { OauthUserRequest, UserRequest } from './auth.pb';
 import * as bcrypt from 'bcrypt';
-import { User as _User } from './auth.pb';
 
 export type JwtPayload = {
   sub: string;
@@ -23,7 +22,7 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
-  async getToken(user: OauthUser) {
+  async getToken(user: OauthUserRequest) {
     let _user = await this.findUserByEmail(user.email);
     if (!_user) {
       _user = await this.registerUser(user);
@@ -32,7 +31,7 @@ export class AuthService {
     return this.generateJwt({ sub: _user.id, email: _user.email });
   }
 
-  async registerUser(user: OauthUser) {
+  async registerUser(user: OauthUserRequest) {
     const newUser = this.userRepository.create({
       email: user.email,
       name: user.name,
@@ -50,7 +49,7 @@ export class AuthService {
     return user;
   }
 
-  async signUp(user: _User) {
+  async signUp(user: UserRequest) {
     if (await this.checkEmailExist(user.email))
       return { error: 'email already exists', token: null };
 
@@ -81,17 +80,13 @@ export class AuthService {
 
     if (!user)
       return {
-        status: HttpStatus.FORBIDDEN,
-        error: ['Token is invalid'],
-        userId: null,
-        email: null,
+        error: 'Token is invalid',
+        user: null,
       };
 
     return {
-      status: HttpStatus.OK,
       error: null,
-      userId: user.id,
-      email: user.email,
+      user,
     };
   }
 }

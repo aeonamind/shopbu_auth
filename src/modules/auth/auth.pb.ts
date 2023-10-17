@@ -4,21 +4,28 @@ import { Observable } from 'rxjs';
 
 export const protobufPackage = 'auth';
 
-export interface OauthUser {
+export interface OauthUserRequest {
   provider: string;
   email: string;
-  name?: string | undefined;
-  avatarUrl?: string | undefined;
+  name: string | undefined;
+  avatarUrl: string | undefined;
 }
 
-export interface User {
+export interface UserRequest {
   name: string;
   email: string;
   password: string;
 }
 
+export interface UserResponse {
+  id: string;
+  name: string;
+  email: string;
+  avatarUrl: string;
+}
+
 export interface GetTokenRequest {
-  user: OauthUser | undefined;
+  user: OauthUserRequest | undefined;
 }
 
 export interface GetTokenResponse {
@@ -31,14 +38,12 @@ export interface ValidateRequest {
 }
 
 export interface ValidateResponse {
-  status: number;
-  error: string[];
-  userId: string;
-  email: string;
+  error: string;
+  user: UserResponse | undefined;
 }
 
 export interface SignUpRequest {
-  user: User | undefined;
+  user: UserRequest | undefined;
 }
 
 export interface SignUpResponse {
